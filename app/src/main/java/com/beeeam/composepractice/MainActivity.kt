@@ -1,29 +1,24 @@
 package com.beeeam.composepractice
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.beeeam.composepractice.ui.theme.ComposePracticeTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,8 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-//                    Greeting("Android")
-                    DemoScreen()
+                    Composable1()
                 }
             }
         }
@@ -45,73 +39,130 @@ class MainActivity : ComponentActivity() {
 }
 
 // @Composable
-// fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier,
-//    )
+// fun DemoScreen() {
+//    var textState by rememberSaveable { mutableStateOf("") }
+//
+//    val onTextChange = { text: String ->
+//        textState = text
+//    }
+//
+//    MyTextField(textState = textState, onTextChange = onTextChange)
 // }
 //
-// @Preview(showBackground = true)
+// @OptIn(ExperimentalMaterial3Api::class)
 // @Composable
-// fun GreetingPreview() {
+// fun MyTextField(textState: String, onTextChange: (String) -> Unit) {
+//    TextField(
+//        value = textState,
+//        onValueChange = { onTextChange(it) }
+//    )
+// }
+
+// @Preview
+// @Composable
+// fun Preview() {
 //    ComposePracticeTheme {
-//        Greeting("Android")
+//        DemoScreen()
 //    }
 // }
 
-@Composable
-fun DemoText(message: String, fontSize: Float) {
-    Text(
-        text = message,
-        fontSize = fontSize.sp,
-        fontWeight = FontWeight.Bold,
-    )
-}
+// @Composable
+// fun FunctionA() {
+//    var switchState by remember { mutableStateOf(true) }
+//
+//    val onSwitchChange = { value: Boolean ->
+//        switchState = value
+//    }
+//
+//    FunctionB(
+//        switchState = switchState,
+//        onSwitchChange = { onSwitchChange(it) }
+//    )
+// }
+//
+// @Composable
+// fun FunctionB(switchState: Boolean, onSwitchChange: (Boolean) -> Unit) {
+//    Switch(
+//        checked = switchState,
+//        onCheckedChange = onSwitchChange
+//    )
+// }
 //
 // @Preview
 // @Composable
-// fun DemoTextPreView() {
-//    DemoText(message = "Welcome to Android", fontSize = 12f)
+// fun PreView() {
+//    ComposePracticeTheme {
+//        Column {
+//            FunctionA()
+//        }
+//    }
 // }
 
+val LocalColor = staticCompositionLocalOf { Color(0xFFffdbcf) }
+
 @Composable
-fun DemoSlider(sliderPosition: Float, onPositionChange: (Float) -> Unit) {
-    Slider(
-        modifier = Modifier.padding(10.dp),
-        valueRange = 20f..40f,
-        value = sliderPosition,
-        onValueChange = { onPositionChange(it) }
-    )
+fun Composable1() {
+    var color = if (isSystemInDarkTheme()) {
+        Color(0xFFa08d87)
+    } else {
+        Color(0xFFffdbcf)
+    }
+    Column {
+        Composable2()
+
+        CompositionLocalProvider(LocalColor provides color) {
+            Composable3()
+        }
+    }
 }
 
 @Composable
-fun DemoScreen() {
-    var sliderPosition by remember { mutableStateOf(20f) }
+fun Composable2() {
+    Composable4()
+}
 
-    val handlePositionChange = { position: Float ->
-        sliderPosition = position
-    }
+@Composable
+fun Composable3() {
+    Composable5()
+}
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        DemoText(message = "Welcome to Compose", fontSize = sliderPosition)
+@Composable
+fun Composable4() {
+    Composable6()
+}
 
-        Spacer(modifier = Modifier.height(150.dp))
+@Composable
+fun Composable5() {
+    Composable7()
+    Composable8()
+}
 
-        DemoSlider(sliderPosition = sliderPosition, onPositionChange = handlePositionChange)
+@Composable
+fun Composable6() {
+    Text("Composable6")
+}
 
-        Text(text = sliderPosition.toInt().toString() + "sp")
-    }
+@Composable
+fun Composable7() {
+}
+
+@Composable
+fun Composable8() {
+    Text("Composable8", modifier = Modifier.background(LocalColor.current))
 }
 
 @Preview
 @Composable
-fun PreView() {
+fun DefaultPreview() {
     ComposePracticeTheme {
-        DemoScreen()
+        Composable1()
+    }
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun DarkPreview() {
+    ComposePracticeTheme {
+        Composable1()
     }
 }
