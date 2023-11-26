@@ -4,31 +4,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.beeeam.composepractice.ui.theme.ComposePracticeTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,141 +38,49 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
                 }
             }
         }
     }
 }
 
-// @Composable
-// fun SlotDemo(
-//    topContent: @Composable () -> Unit,
-//    midContent: @Composable () -> Unit,
-//    bottomContent: @Composable () -> Unit,
-// ) {
-//    Column {
-//        topContent()
-//        midContent()
-//        bottomContent()
-//    }
-// }
-//
-// @Composable
-// fun SlotButton() {
-//    Button(onClick = { }) {
-//        Text("Click Me!!")
-//    }
-// }
-//
-// @Preview
-// @Composable
-// fun Preview() {
-//    ComposePracticeTheme {
-//        SlotDemo(
-//            topContent = { Text(text = "Top Content") },
-//            midContent = { SlotButton() },
-//            bottomContent = { Text(text = "Bottom Content") }
-//        )
-//    }
-// }
-
 @Composable
-fun TitleImage(drawing: Int) {
-    Image(painter = painterResource(drawing), contentDescription = "Title Image")
-}
-
-@Composable
-fun MainScreen() {
-    var linearSelected by remember { mutableStateOf(true) }
-    var imageSelected by remember { mutableStateOf(true) }
-
-    val onLinearClick = { value: Boolean ->
-        linearSelected = value
-    }
-
-    val onImageClick = { value: Boolean ->
-        imageSelected = value
-    }
-
-    ScreenContent(
-        linearSelected = linearSelected,
-        imageSelected = imageSelected,
-        onLinearClick = onLinearClick,
-        onImageClick = onImageClick,
-        titleContent = {
-            if (imageSelected) {
-                TitleImage(drawing = R.drawable.baseline_cloud_download_24)
-            } else {
-                Text(text = "DownLoading", modifier = Modifier.padding(30.dp))
-            }
-        },
-        progressContent = {
-            if (linearSelected) {
-                LinearProgressIndicator(Modifier.height(40.dp))
-            } else {
-                CircularProgressIndicator(Modifier.height(200.dp), strokeWidth = 18.dp)
-            }
-        }
-    )
-}
-
-@Composable
-fun ScreenContent(
-    linearSelected: Boolean,
-    imageSelected: Boolean,
-    onLinearClick: (Boolean) -> Unit,
-    onImageClick: (Boolean) -> Unit,
-    titleContent: @Composable () -> Unit,
-    progressContent: @Composable () -> Unit,
-) {
+fun DemoScreen() {
+    val modifier = Modifier.border(width = 2.dp, color = Color.Black).padding(10.dp)
     Column(
-        modifier = Modifier.fillMaxSize(),
+        Modifier.padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.Center
     ) {
-        titleContent()
-        progressContent()
-        CheckBoxes(
-            linearSelected = linearSelected,
-            imageSelected = imageSelected,
-            onLinearClick = onLinearClick,
-            onImageClick = onImageClick
+        Text(
+            text = "Hello Compose",
+            modifier = modifier,
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        CustomImage(
+            drawing = R.drawable.vacation,
+            modifier = Modifier.padding(10.dp).width(270.dp).clip(shape = RoundedCornerShape(30.dp))
         )
     }
 }
 
 @Composable
-fun CheckBoxes(
-    linearSelected: Boolean,
-    imageSelected: Boolean,
-    onLinearClick: (Boolean) -> Unit,
-    onImageClick: (Boolean) -> Unit,
-) {
-    Row(
-        Modifier.padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(checked = imageSelected, onCheckedChange = onImageClick)
-        Text("Image Title")
-
-        Spacer(modifier = Modifier.width(20.dp))
-
-        Checkbox(checked = linearSelected, onCheckedChange = onLinearClick)
-        Text("Linear Title")
-    }
+fun CustomImage(drawing: Int, modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(drawing),
+        modifier = modifier,
+        contentDescription = null
+    )
 }
 
 @Preview
 @Composable
 fun Preview() {
     ComposePracticeTheme {
-//        CheckBoxes(
-//            linearSelected = true,
-//            imageSelected = true,
-//            onLinearClick = {  },
-//            onImageClick = {  }
-//        )
-        MainScreen()
+        DemoScreen()
     }
 }
